@@ -1,0 +1,48 @@
+.window_boundBox {
+    position: fixed;
+    border: 1px solid burlywood;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+}
+
+.window_alertBtn{
+    width: 100px;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    margin-left: -50px;
+}
+.window_closeBtn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 5px 10px;
+    font-size: 20px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.window_header{
+    background: #333;
+    color: #ffffff;
+    text-align: center;
+    padding: 5px;
+    font-size: 20px;
+}
+
+/*自定义皮肤*/
+/*skin for a*/
+/*同级选择两个类之间无空间*/
+.window_skin_a.window_boundBox{
+    background-color: lightsalmon;
+}
+/*子级选择两个类之间有空间*/
+.window_skin_a .window_header{
+    background-color: pink;
+}
+
+.window_skin_a .window_alertBtn{
+    background-color: lightyellow;
+}
+.window_skin_a .window_closeBtn{
+    background-color: lightblue;
+}
