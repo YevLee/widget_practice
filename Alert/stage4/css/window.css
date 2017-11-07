@@ -1,0 +1,21 @@
+.window_boundBox {
+    position: fixed;
+    border: 1px solid burlywood;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+}
+
+.window_boundBox input {
+    width: 100px;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    margin-left: -50px;
+}
+
+.window_header{
+    background: #333;
+    color: #ffffff;
+    text-align: center;
+    padding: 5px;
+    font-size: 20px;
+}
