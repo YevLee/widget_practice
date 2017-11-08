@@ -52,6 +52,10 @@
     background-color: #000;
 }
 
+.window_promptInputWrapper{
+    text-align: center;
+}
+
 /*自定义皮肤*/
 /*skin for a*/
 /*同级选择两个类之间无空间*/
