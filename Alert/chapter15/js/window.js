@@ -20,71 +20,75 @@ define(["widget", "jquery", "jqueryUI"], function (widget, $, $UI) {
     }
 
     Window.prototype = $.extend({}, new widget.Widget(), {//mixin即多继承
-        // constructor: Window,
-        alert: function (cfg) {
-            var that = this;
-            var CFG = $.extend(this.cfg, cfg);
-            var boundingBox = document.createElement("div");
-            boundingBox.classList.add("window_boundBox");
-            boundingBox.innerHTML = `
-                <div class="window_header">${CFG.title}</div>
-                <div class="window_body">${CFG.content}</div>
+        renderUI: function () {
+            var tempBoundingBox = document.createElement("div");
+            tempBoundingBox.classList.add("window_boundBox");
+            tempBoundingBox.innerHTML = `
+                <div class="window_header">${this.cfg.title}</div>
+                <div class="window_body">${this.cfg.content}</div>
                 <div class="window_footer"></div>
-                <input type="button" class="window_alertBtn" value=${CFG.text4AlertBtn}>`;
-            document.body.appendChild(boundingBox);
-            var mask = null;
-            if (CFG.hasMask) {
-                mask = document.createElement("div");
-                mask.classList.add("window_mask");
-                document.body.insertBefore(mask, document.body.firstChild);
+                <input type="button" class="window_alertBtn" value=${this.cfg.text4AlertBtn}>`;
+            this.boundingBox = $(tempBoundingBox);
+
+            if (this.cfg.hasMask) {
+                this._mask = $('<div class="window_mask"></div>');
+                this._mask.appendTo("body");
             }
 
-            if (CFG.isDraggable) {
-                if (CFG.dragHandle) {
-                    $(boundingBox).draggable({handle: CFG.dragHandle});
+            if (this.cfg.hasCloseBtn) {
+                this.boundingBox.append('<span class="window_closeBtn">X</span>');
+            }
+            this.boundingBox.appendTo(document.body);
+        },
+
+        bindUI: function () {
+            var that = this;
+            //event delegate
+            this.boundingBox.delegate(".window_alertBtn", "click", function () {
+                that.fire("alert");
+                that.destroy();
+            }).delegate(".window_closeBtn", "click", function () {
+                that.fire("close");
+                that.destroy();
+            });
+
+            if (this.cfg.handler4CloseBtn) {
+                this.on("close", this.cfg.handler4CloseBtn);
+            }
+
+            if (this.cfg.handler4AlertBtn) {
+                this.on("alert", this.cfg.handler4AlertBtn);
+            }
+        },
+
+        syncUI: function () {
+            this.boundingBox.css({
+                width: this.cfg.width + "px",
+                height: this.cfg.height + "px",
+                left: this.cfg.x || ((window.innerWidth - this.cfg.width) / 2) + "px",
+                top: this.cfg.y || ((window.innerHeight - this.cfg.height) / 2) + "px"
+            });
+            if (this.cfg.skinClassName) {
+                this.boundingBox.addClass(this.cfg.skinClassName);
+            }
+            if (this.cfg.isDraggable) {
+                if (this.cfg.dragHandle) {
+                    this.boundingBox.draggable({handle: this.cfg.dragHandle});
                 } else {
                     //draggable is a function in jqueryUI
-                    $(boundingBox).draggable();
+                    this.boundingBox.draggable();
                 }
             }
+        },
 
-            var btn = document.querySelector(".window_boundBox input");
-            btn.addEventListener("click", () => {
-                document.body.removeChild(boundingBox);
-                mask && document.body.removeChild(mask);
-                that.fire("alert");
-            });
-            boundingBox.setAttribute("style",
-                "width:" + this.cfg.width + "px;" +
-                "height:" + this.cfg.height + "px;" +
-                "left:" + (this.cfg.x || ((window.innerWidth - this.cfg.width) / 2)) + "px;" +//居中
-                "top:" + (this.cfg.y || ((window.innerHeight - this.cfg.height) / 2)) + "px");
+        destructor: function () {
+            this._mask && this._mask.remove();
+        },
 
-            if (CFG.hasCloseBtn) {
-                // <span class="window_closeBtn">X</span>
-                let closeBtn = document.createElement("span");
-                closeBtn.classList.add("window_closeBtn");
-                closeBtn.appendChild(document.createTextNode("X"));
-                boundingBox.appendChild(closeBtn);
-                closeBtn.addEventListener("click", () => {
-                    document.body.removeChild(boundingBox);
-                    mask && document.body.removeChild(mask);
-                    that.fire("close");
-                });
-            }
-
-            if (CFG.skinClassName) {
-                //特度值
-                boundingBox.classList.add(CFG.skinClassName);
-            }
-
-            if (CFG.handler4CloseBtn) {
-                this.on("close", CFG.handler4CloseBtn);
-            }
-
-            if (CFG.handler4AlertBtn) {
-                this.on("alert", CFG.handler4AlertBtn);
-            }
+        //main()
+        alert: function (cfg) {
+            $.extend(this.cfg, cfg);
+            this.render();
             return this;
         },
         confirm: function () {

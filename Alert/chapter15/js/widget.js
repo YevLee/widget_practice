@@ -1,11 +1,13 @@
 // abstract class
-define(function () {
+define(["jquery"], function ($) {
     function Widget() {
-        this.handlers = {};
+        this.handlers = null;
+        this.boundingBox = null;//field:outermost container
     }
 
     Widget.prototype = {
         constructor: Widget,
+        //implemented method
         // observer pattern
         on: function (type, handler) {
             if (!this.handlers[type]) {
@@ -22,8 +24,35 @@ define(function () {
                 }
             }
         },
+        render:function (container) {//method:render component
+            this.renderUI();
+            this.handlers = {};
+            this.bindUI();
+            this.syncUI();
+            $(container || document.body).append(this.boundingBox);
+        },
+        destroy:function () {
+            this.destructor();
+            //The .off() method removes event handlers that were attached with .on().
+            this.boundingBox.off();
+            this.boundingBox.remove();
+        },
+
+        //abstract method
+        renderUI:function () {//interface:add dom node
+            console.error("renderUI should be override");
+        },
+        bindUI:function () {//interface:event listener
+            console.error("bindUI should be override");
+        },
+        syncUI:function () {//interface:init component field
+            console.error("syncUI should be override");
+        },
+        destructor:function () {//interface:invoke before destroy
+            console.error("destructor should be override")
+        },
     };
     return {
-        Widget:Widget
+        Widget: Widget
     }
 });
