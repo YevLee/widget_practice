@@ -1,8 +1,9 @@
 require.config({
     paths: {
-        jquery: "../../lib/jquery",
         window: "window",
-        jqueryUI: "../../lib/jquery-ui.min",
+        widget: "widget",
+        jquery: "../../lib/jquery",
+        jqueryUI: "../../lib/jquery-ui.min"
     }
 });
 

@@ -1,4 +1,4 @@
-define(["jquery", "jqueryUI"], function ($, $UI) {
+define(["widget", "jquery", "jqueryUI"], function (widget, $, $UI) {
     function Window() {
         this.cfg = {
             title: "",
@@ -19,24 +19,8 @@ define(["jquery", "jqueryUI"], function ($, $UI) {
         this.handlers = {};
     }
 
-    //在原型中改写三个弹框
-    Window.prototype = {
-        // observer pattern
-        on: function (type, handler) {
-            if (!this.handlers[type]) {
-                this.handlers[type] = [];
-            }
-            this.handlers[type].push(handler);
-            return this;
-        },
-        fire: function (type, data) {
-            if (this.handlers[type] instanceof Array) {
-                var handlers = this.handlers[type];
-                for (let i = 0, len = handlers.length; i < len; i++) {
-                    handlers[i](data);
-                }
-            }
-        },
+    Window.prototype = $.extend({}, new widget.Widget(), {//mixin即多继承
+        // constructor: Window,
         alert: function (cfg) {
             var that = this;
             var CFG = $.extend(this.cfg, cfg);
@@ -103,14 +87,13 @@ define(["jquery", "jqueryUI"], function ($, $UI) {
             }
             return this;
         },
-        constructor: Window,
         confirm: function () {
 
         },
         prompt: function () {
 
         }
-    };
+    });
 
     // export
     return {

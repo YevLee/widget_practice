@@ -1,1 +1,1 @@
-## method chaining
+## Abstract class
