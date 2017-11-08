@@ -1,0 +1,1 @@
+## Add consistent life cycle for Widget
