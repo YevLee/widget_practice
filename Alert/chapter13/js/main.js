@@ -24,10 +24,6 @@ require(["jquery", "window"], function ($, w) {
         skinClassName: "window_skin_a",
         text4AlertBtn: "OK",
         dragHandle: ".window_header"
-    });
-
-    win.on("alert", () => alert("you second click alert button"));
-    win.on("close", () => alert("you second click close button"));
-
-
+    }).on("alert", () => alert("you second click alert button"))
+        .on("close", () => alert("you second click close button"));
 });

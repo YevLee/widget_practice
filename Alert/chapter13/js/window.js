@@ -27,6 +27,7 @@ define(["jquery", "jqueryUI"], function ($, $UI) {
                 this.handlers[type] = [];
             }
             this.handlers[type].push(handler);
+            return this;
         },
         fire: function (type, data) {
             if (this.handlers[type] instanceof Array) {
@@ -100,8 +101,7 @@ define(["jquery", "jqueryUI"], function ($, $UI) {
             if (CFG.handler4AlertBtn) {
                 this.on("alert", CFG.handler4AlertBtn);
             }
-
-
+            return this;
         },
         constructor: Window,
         confirm: function () {
